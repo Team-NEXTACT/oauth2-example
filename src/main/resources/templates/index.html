@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8">
+		<meta content="width=device-width, initial-scale=1" name="viewport">
+		<title>소셜로그인 테스트</title>
+		<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+		<script async defer src="https://accounts.google.com/gsi/client"></script>  <!-- Google SDK -->
+		<script crossorigin="anonymous"
+		        integrity="sha384-DKYJZ8NLiK8MN4/C5P2dtSmLQ4KwPaoqAfyA/DfmEc1VDxu4yyC7wy6K1Hs90nka"
+		        src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js"></script>
+	</head>
+	<body>
+		<section class="flex items-center justify-center h-screen bg-gray-100">
+			<div class="flex items-center justify-center h-screen bg-gray-100">
+				<button class="w-auto h-auto px-6 py-3 text-white bg-sky-500 mr-4 rounded" id="google-login">
+					구글 로그인
+				</button>
+				<button class="w-auto h-auto px-6 py-3 text-black ml-4 bg-yellow-500 rounded" id="kakao-login">
+					카카오 로그인
+				</button>
+			</div>
+		</section>
+		<script th:inline="javascript">
+
+      document.getElementById('google-login').addEventListener('click', googleLogin);
+      document.getElementById('kakao-login').addEventListener('click', kakaoLogin);
+
+      function googleLogin() {
+        const GOOGLE_CLIENT_ID = [[${googleClientId}]];
+        google.accounts.oauth2.initCodeClient({
+          client_id: GOOGLE_CLIENT_ID,
+          scope: 'email profile',
+          redirect_uri: 'http://localhost:8080/oauth2/code/google',
+          ux_mode: 'redirect',
+        }).requestCode();
+      }
+
+      function kakaoLogin() {
+        const KAKAO_CLIENT_ID = [[${kakaoClientId}]];
+        Kakao.init(KAKAO_CLIENT_ID);
+        Kakao.Auth.authorize({
+          redirectUri: 'http://localhost:8080/oauth2/code/kakao',
+        });
+      }
+		</script>
+	</body>
+</html>

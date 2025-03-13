@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8">
+		<meta content="width=device-width, initial-scale=1" name="viewport">
+		<title>구글 로그인중..</title>
+		<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	</head>
+	<body>
+		<div class="fixed inset-0 flex flex-col items-center justify-center bg-white">
+			<div class="w-16 h-16 border-4 border-yellow-400 border-t-black rounded-full animate-[spin_1s_linear_infinite]"></div>
+			<p class="mt-4 text-gray-700 text-lg font-semibold">구글 로그인 중...</p>
+		</div>
+		<script>
+      window.addEventListener('load', googleLogin);
+
+      async function googleLogin() {
+        const url = new URL(window.location.href);
+        const redirectUrl = url.origin + url.pathname;
+        const params = new URLSearchParams(window.location.search);
+        const authCode = params.get('code');
+        const response = await axios.post('http://localhost:8080/oauth2/token/google', {
+          code: authCode,
+          redirectUrl: redirectUrl
+        })
+        .then(res => res.data);
+
+        const accessToken = response.data;
+        await axios.post('http://localhost:8080/oauth2/login/google', {
+          accessToken: accessToken
+        })
+        .then(res => {
+          const payload = res.data.data;
+          window.location.href = `http://localhost:8080/oauth2/success?provider=google&email=${payload.email}&image=${payload.profileImage}`;
+        });
+
+      }
+		</script>
+	</body>
+</html>

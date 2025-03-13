@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8">
+		<meta content="width=device-width, initial-scale=1" name="viewport">
+		<title>소셜로그인 성공 페이지</title>
+		<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+	</head>
+	<body>
+		<section class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+			<div class="bg-white shadow-lg rounded-2xl p-6 max-w-md text-center">
+				<h2 class="text-2xl font-bold text-green-600" id="provider">회원가입 성공! 🎉</h2>
+				<p class="text-gray-600 mt-2">환영합니다! 가입이 완료되었습니다.</p>
+
+				<div class="mt-6">
+					<img alt="Profile" class="w-24 h-24 rounded-full mx-auto border-4 border-green-500 shadow-md" id="profileImage" src="">
+					<p class="mt-4 text-lg font-semibold" id="email">email</p>
+				</div>
+
+				<button class="mt-6 px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition"
+				        onclick="goHome()">
+					홈으로 이동
+				</button>
+			</div>
+		</section>
+		<script>
+      const params = new URLSearchParams(window.location.search);
+      let provider = params.get('provider');
+      const email = params.get('email');
+      const profileImage = params.get('image');
+
+      if (provider === 'kakao') {
+        provider = '카카오';
+      } else if (provider === 'google') {
+        provider = '구글';
+      }
+      document.getElementById('email').textContent = email;
+      document.getElementById('provider').textContent = `${provider} 회원가입 성공! 🎉`;
+      document.getElementById('profileImage').src = profileImage;
+
+      function goHome() {
+        window.location.href = '/';
+      }
+		</script>
+	</body>
+</html>
